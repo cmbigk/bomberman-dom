@@ -3,7 +3,7 @@ package main
 import "bomberman-dom/models"
 
 const (
-	BombTimer         = 150 // Ticks before explosion (e.g., 3 seconds at 50 ticks/sec)
+	BombTimer         = 100 // Ticks before explosion (e.g., 3 seconds at 50 ticks/sec)
 	FlameTime         = 25  // Ticks for how long flames last (0.5 seconds at 50 ticks/sec)
 	InvincibilityTime = 100 // Ticks for invincibility after respawn (2 seconds)
 )
