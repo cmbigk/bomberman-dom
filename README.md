@@ -1,77 +1,122 @@
-# Bomberman DOM - UI Demo
+# Bomberman DOM
 
-A UI demonstration for a multiplayer Bomberman game built with DOM manipulation using a custom mini-framework. This demo shows the nickname input and waiting room interface.
+A real-time multiplayer Bomberman game with a Go WebSocket backend and a custom JavaScript mini-framework frontend.
 
 ## Features
 
-- **Nickname Input**: Players enter their nickname to join the game
-- **Waiting Room**: Demo UI showing players waiting for others to join (2-4 players)
-- **Group Chat**: Functional chat interface with demo responses
-- **Smart Timers**: 
-  - 20-second wait for more players when 2+ players are present
-  - 10-second countdown when room is full or wait time expires
-- **Responsive Design**: Works on desktop and mobile devices
+- **Real-time Multiplayer**: 2-4 players via WebSocket connections
+- **Game Lobby System**: 
+  - Nickname input and validation
+  - Waiting room with live player list
+  - Group chat functionality
+  - Smart timer logic (20s wait, then 10s countdown)
+- **Game Logic** (Backend):
+  - Player movement and collision detection
+  - Bomb placement and explosions
+  - Flame propagation system
+  - Power-ups (speed, bomb count, range)
+  - Win/lose conditions
+  - Map generation with destructible/indestructible blocks
+- **Responsive Design**: Modern UI that works on desktop and mobile
 
 ## Tech Stack
 
-- **Frontend**: Custom mini-framework with Virtual DOM (ONLY)
-- **No Backend**: Pure UI demo with simulated player interactions  
-- **Styling**: Pure CSS with modern design
+- **Backend**: Go 1.23+ with Gorilla WebSocket
+- **Frontend**: Custom mini-framework with Virtual DOM (no external libraries)
+- **Communication**: WebSocket protocol for real-time updates
+- **Styling**: Pure CSS
 
-**NO EXTERNAL FRAMEWORKS OR LIBRARIES USED** - Only the custom mini-framework and pure JavaScript!
+**Frontend uses NO external frameworks** - only a custom mini-framework and vanilla JavaScript!
 
 ## Project Structure
 
 ```
 bomberman-dom/
-├── mini-framework/          # Custom framework
-│   ├── App.js              # Main app class
-│   ├── VirtualDom.js       # Virtual DOM implementation
-│   ├── StateManager.js     # State management
-│   ├── Routing.js          # Client-side routing
-│   └── TodoDomUpdater.js   # DOM update utilities
-├── components/             # UI Components
-│   ├── NicknameScreen.js   # Nickname input screen
-│   └── WaitingRoom.js      # Waiting room with chat
-├── main.js                 # Frontend entry point
-├── gameState.js           # Game state management (demo mode)
-├── styles.css             # Application styles
-├── dev-server.js          # Development HTTP server
-└── index.html             # Main HTML file
-```
+├── backend/                # Go backend
+│   ├── game.go            # Core game loop and logic
+│   ├── lobby.go           # Lobby and WebSocket handler
+│   ├── player.go          # Player logic
+│   ├── bomb.go            # Bomb mechanics
+│   ├── map.go             # Map generation
+│   ├── powerup.go         # Power-up system
+│   ├── models/            # Data models and protocols
+│   │   ├── models.go     # Game state structures
+│   │   └── protocols.go  # WebSocket message formats
+│   └── utils/             # Helper utilities
+│       └── utils.go
+├── mini-framework/         # Custom frontend framework
+│   ├── App.js             # Main app class
+│   ├── VirtualDom.js      # Virtual DOM implementation
+│   ├── StateManager.js    # State management
+│   ├── Routing.js         # Client-side routing
+│   └── TodoDomUpdater.js  # DOM update utilities
+### Prerequisites
+- **Go 1.23+**: [Download here](https://go.dev/dl/)
+- **Modern browser**: Chrome, Firefox, Safari, or Edge
 
-## Installation & Setup
+### Steps
 
 1. **Clone or navigate to the project directory**
    ```bash
    cd bomberman-dom
    ```
 
-2. **No installation needed!** - Pure JavaScript with no external dependencies
-
-3. **Start the development server**
+2. **Install Go dependencies**
    ```bash
-   node dev-server.js
+   go mod download
    ```
 
-4. **Open the demo**
-   - Navigate to `http://localhost:3000` in your browser
-   - Enter a nickname and explore the waiting room UI
-   - Chat messages will receive simulated responses
+3. **Start the backend server**
+   ```bash
+   go run main.go
+   ```
+   Server starts on `http://localhost:8080` with WebSocket endpoint at `ws://localhost:8080/ws/lobby`
 
-## Demo Flow
+4. **Open the game**
+   - Navigate to `http://localhost:8080` in your browser
+   - Open multiple browser tabs/windows to test multiplayer
+   Architecture
 
-1. **Nickname Screen**: Enter a unique nickname (2-20 characters)
-2. **Waiting Room**: 
-   - See simulated players joining over time
-   - Test the chat functionality with demo responses
-   - Watch the timer logic in action as more "players" join
+### Backend (Go)
+- **WebSocket Server**: Real-time bidirectional communication using Gorilla WebSocket
+- **Game Loop**: Server-side game tick at ~60 FPS for smooth gameplay
+- **State Broadcasting**: Pushes game state updates to all connected clients
+- **Protocol**: JSON-based message format for client-server communication
 
-## Mini-Framework Usage
+### Frontend (Custom Framework)
+- **Virtual DOM**: Efficient DOM updates with `createElement()` and diffing
+- **State Management**: Reactive state updates trigger automatic re-renders
+- **WebSocket Client**: Maintains connection, handles reconnection logic
+- **Component System**: Functional components with unidirectional data flow
 
-This demo showcases the custom mini-framework with:
+### Example Component:
 
-- **Virtual DOM**: Efficient DOM updates with `createElement()` and `updateDom()`
+```javascript
+import { createElement } from './mini-framework/VirtualDom.js';
+
+export function MyComponent(state, onAction) {
+    return createElement('div', { className: 'my-component' },
+        createElement('h1', {}, 'Hello World'),
+        createElement('button', {
+            onclick: () => onAction('clicked')
+        }, 'Click Me')
+    );
+}
+```
+
+## Development
+
+- **Backend**: Edit files in `backend/` and restart server
+- **Frontend**: Edit files in `components/` or `mini-framework/`, refresh browser
+- **Testing Multiplayer**: Open multiple browser tabs/windows
+
+## Future Enhancements
+
+- [ ] Game screen UI implementation  
+- [ ] Sound effects and animations
+- [ ] Leaderboard and statistics
+- [ ] Multiple game rooms
+- [ ] Spectator mode
 - **State Management**: Centralized state with automatic UI updates
 - **Component System**: Reusable UI components
 - **Event Handling**: Declarative event binding
