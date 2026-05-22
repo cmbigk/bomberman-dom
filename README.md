@@ -103,4 +103,4 @@ export function MyComponent(state, onAction) {
 - Responsive design showcase
 - State management example
 
-**This is a UI-only demonstration.** The actual game logic (board, movement, bombs) would be built on top of this foundation.
+
